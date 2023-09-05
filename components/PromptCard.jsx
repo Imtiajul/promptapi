@@ -40,12 +40,12 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
           </div>
         </div>
 
-        <div className="copied_btn" onClick={handleCopy}>
+        <div className="copied_btn cursor-pointer" onClick={handleCopy}>
           <Image
             src={copied === post.prompt
               ? '/assets/images/tick-50-orange.png'
               : '/assets/images/copy-50-orange.png'}
-              alt='copy-thik icon'
+            alt='copy-thik icon'
             width={15}
             height={15}
           />
@@ -54,16 +54,16 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
 
       <p className="my-4 font-satoshi text-sm text-gray-700">{post.prompt}</p>
       <p className="font-inter text-sm- blue_gradient cursor-pointer" onClick={() => handleTagClick && handleTagClick(post.tag)}>
-        {post.tag} 
+        {post.tag}
       </p>
 
       {session?.user.id === post.creator._id && pathName == '/profile' && (
-        <div>
+        <div className="flex-center mt-5 gap-4 border-t border-gray-100 pt-3">
           <p className="font-inter text-sm green_gradient cursor-pointer"
-            onClick={handleEdit && handleEdit(post)}>Edit</p>
+            onClick={() => handleEdit && handleEdit(post)}>Edit</p>
 
-          <p className="font-inter text-sm green_gradient cursor-pointer"
-            onClick={handleDelete && handleDelete(post)}>Delete</p>
+          <p className="font-inter text-sm orange_gradient cursor-pointer bg-fuchsia-500 px-3 py-5"
+            onClick={() => handleDelete && handleDelete(post)}>Delete</p>
         </div>
       )
       }

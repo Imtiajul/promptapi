@@ -10,6 +10,8 @@ const MyProfile = () => {
    const [posts, setPosts] = useState('')
 
    const { data: session } = useSession();
+   const router = useRouter();
+
    useEffect(() => {
       const fetchData = async () => {
          const response = await fetch(`/api/user/${session?.user.id}/posts`);
@@ -19,15 +21,29 @@ const MyProfile = () => {
 
       if(session?.user.id) fetchData();
    }, []);
-
-   console.log('posts', posts);
-
-   const handleEdit = () => {
-
+    
+   const handleEdit = (post) => {
+      router.push(`/update-prompt?id=${post._id}`)
    }
 
-   const handleDelete = async () => {
+   const handleDelete = async (post) => {
+      const hasConfirmed = confirm('Are you sure you want to delete?');
 
+      if(hasConfirmed) {
+         try {
+            await fetch(`/api/prompt/${post._id.toString()}`, {
+               method: 'DELETE',
+            });
+            const filteredPosts = posts.filter( (p) => {
+               p.id !== post._id;
+            })
+
+            setPosts(filteredPosts);
+
+         } catch (error) {
+            console.error(error);
+         }
+      }
    }
    return (
       <Profile
