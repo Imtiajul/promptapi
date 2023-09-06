@@ -1,34 +1,33 @@
-"use client";
+'use client'
 
-import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useState, useEffect } from "react"
+// import { useSearchParams } from 'next/navigation'
 
-import Profile from "@components/Profile";
+import Profile from '@components/Profile'
 
-const UserProfile = ({ params }) => {
-  const searchParams = useSearchParams();
-  const userName = searchParams.get("name");
+const UserProfile = ({params}) => {
+   const [posts, setPosts] = useState('')
+   
+  // const searchParams = useSearchParams();
+  // const userName = searchParams.get("name");
+  //  console.log(userName);
 
-  const [userPosts, setUserPosts] = useState([]);
+   useEffect(() => {
+      const fetchData = async () => {
+         const response = await fetch(`/api/user/${params?.id}/posts`);
+         const data = await response.json();
+         setPosts(data);
+      }
+      fetchData();
+   }, [params.id]);
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      const response = await fetch(`/api/users/${params?.id}/posts`);
-      const data = await response.json();
+   return (
+      <Profile
+         name={posts[0]?.creator.username}
+         desc="Welcome to your personalized profile page"
+         data={posts}
+      />
+   )
+}
 
-      setUserPosts(data);
-    };
-
-    if (params?.id) fetchPosts();
-  }, [params.id]);
-
-  return (
-    <Profile
-      name={userName}
-      desc={`Welcome to ${userName}'s personalized profile page. Explore ${userName}'s exceptional prompts and be inspired by the power of their imagination`}
-      data={userPosts}
-    />
-  );
-};
-
-export default UserProfile;
+export default UserProfile
